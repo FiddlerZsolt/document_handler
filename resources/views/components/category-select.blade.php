@@ -5,7 +5,7 @@
     'except' => null
 ])
 
-<select name="{{ $name }}">
+<select name="{{ $name }}" class="form-select mb-3">
 
     @foreach ($categories as $category)
 

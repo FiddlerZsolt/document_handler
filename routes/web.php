@@ -19,14 +19,22 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::controller(CategoryController::class)->group(function ()
+Route::middleware('auth')->group(function ()
 {
-    Route::get('/categories/{id}', 'show')->where('id', '[0-9]+');
-    Route::get('/categories/create', 'create');
-    Route::get('/categories', 'index');
 
-    Route::post('/categories/store', 'store');
-    Route::post('/categories/{id}', 'update')->where('id', '[0-9]+');
+    Route::controller(CategoryController::class)->group(function ()
+    {
+        Route::get('/categories/{id}', 'show')->where('id', '[0-9]+');
+        Route::get('/categories/create', 'create');
+        Route::get('/categories', 'index');
 
-    Route::delete('/categories/{id}', 'destroy');
+        Route::post('/categories/store', 'store');
+        Route::post('/categories/{id}', 'update')->where('id', '[0-9]+');
+
+        Route::delete('/categories/{id}', 'destroy');
+    });
 });
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

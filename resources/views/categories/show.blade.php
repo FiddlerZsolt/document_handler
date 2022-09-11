@@ -2,74 +2,94 @@
 
 
 @section('content')
+    <!-- Button trigger modal -->
 
-    <style>
-        table { border-collapse: collapse; }
-        th,td { border: 1px solid black; padding: .5rem 1rem; }
-    </style>
-
-    <div class="category">
-
-        <form action="/categories/{{ $category->id }}" method="POST">
-            @csrf
-            @method('DELETE')
-
-            <button type="submit">
-                Delete
-            </button>
-        </form>
-
-        <form action="/categories/{{ $category->id }}" method="POST">
-            @csrf
-            <table>
-
-                <tr>
-                    <td>Név</td>
-                    <td colspan="2">
-                        {{ $category->title }}
-                        <input type="text" name="title" {{-- style="display: none;" --}} value="{{ $category->title }}">
-                    </td>
-                </tr>
-
-                <tr>
-                    <td>Szülõ:</td>
-                    <td {{ $category->parent_id === 1 ? "colspan=2" : ""}}>
-                        <x-category-select
-                            name="parent_id"
-                            :categories="$categories"
-                            :selected="$category->parent_id"
-                            :except="$category->id" />
-                    </td>
-                    @if ($category->parent_id != 1)
-                        <td>
-                            <a href="/categories/{{ $category->parent_id }}">
-                                See
-                            </a>
-                        </td>
-                    @endif
-                </tr>
-
-                @if ($children)
-                    <tr>
-                        <td>Gyerekek</td>
-                        <td colspan="2">
-                            <x-category-list :categories="$children" />
-                        </td>
-                    </tr>
-                @endif
-
-                <tr>
-                    <td colspan="2"></td>
-                    <td>
-                        <button type="submit">
-                            Save
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Biztosan törlöd a kategóriát?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="delete-form" class="d-flex justify-content-end" action="/categories/{{ $category->id }}" method="POST">
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-danger">
+                            Törlés
+                            &nbsp;
+                            <i class="bi bi-trash3-fill"></i>
                         </button>
-                    </td>
-                </tr>
-
-            </table>
-        </form>
-
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Mégsem</button>
+                    </div>
+                </form>
+            </div>
+        </div>
     </div>
 
+    <div class="container">
+
+        {{-- Delete --}}
+        <div class="row">
+            <div class="col-md-3"></div>
+            <div class="col-md-6">
+                <button type="button" class="btn btn-danger mb-3 delete-category" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                    Törlés
+                    &nbsp;
+                    <i class="bi bi-trash3-fill"></i>
+                </button>
+            </div>
+            <div class="col-md-3"></div>
+        </div>
+
+        {{-- Edit --}}
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-6">
+                <form action="/categories/{{ $category->id }}" method="POST">
+
+                    @csrf
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">
+                            Kategória neve
+                        </label>
+                        <input type="text" id="name" class="form-control" name="title"
+                            value="{{ $category->title }}">
+                        <div id="nameHelp" class="form-text">
+                            Minimum 3 karakter
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="name" class="form-label">
+                            Szülõ
+                            &nbsp;
+
+                            @if (!$category->isRoot())
+                                <a href="/categories/{{ $category->parent_id }}">
+                                    <i class="bi bi-eye-fill"></i>
+                                </a>
+                            @endif
+                        </label>
+                        <x-category-select name="parent_id" :categories="$categories" :selected="$category->parent_id" :except="$category->id" />
+                    </div>
+
+                    @if ($children)
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Gyerekek</label>
+                            <x-category-list :categories="$children" />
+                        </div>
+                    @endif
+
+                    <button type="submit" class="btn btn-success">
+                        Mentés
+                        &nbsp;
+                        <i class="bi bi-check2"></i>
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    </div>
 @endsection

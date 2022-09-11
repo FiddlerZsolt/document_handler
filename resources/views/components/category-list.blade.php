@@ -1,13 +1,9 @@
-@props([
-    'categories'
-])
+@props(['categories'])
 
-<ul id="category-list">
+<div id="category-list" class="list-group">
 
     @foreach ($categories as $category)
-
         <x-category-item :category="$category" :except="1" />
-
     @endforeach
 
-</ul>
+</div>

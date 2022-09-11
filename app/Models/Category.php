@@ -11,4 +11,10 @@ class Category extends Model
     use \Staudenmeir\LaravelAdjacencyList\Eloquent\HasRecursiveRelationships;
 
     protected $fillable = ['title', 'parent_id'];
+
+    public function isRoot()
+    {
+        $root = Category::where('parent_id', null)->first();
+        return $this->parent_id === $root->id;
+    }
 }
