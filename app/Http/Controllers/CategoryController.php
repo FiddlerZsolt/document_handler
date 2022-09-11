@@ -77,6 +77,7 @@ class CategoryController extends Controller
 
         return view(
             'categories.show', [
+            'title' => "Kategóra - {$category->title}",
             'category' => $category,
             'categories' => $categories,
             'children' => $children,
