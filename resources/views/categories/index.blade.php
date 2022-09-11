@@ -1,5 +1,6 @@
 @extends('layouts.app')
 
+
 @section('content')
 
     @if (count($categories) > 0)

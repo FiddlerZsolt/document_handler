@@ -1,0 +1,17 @@
+$bg-color: #2f3640;
+$text-color: #f5f6fa;
+$text-hover-color: #dcdde1;
+
+@media (prefers-color-scheme: dark) {
+    $bg-color: #2f3640;
+    $text-color: #f5f6fa;
+    $text-hover-color: #dcdde1;
+}
+
+@media (prefers-color-scheme: light) {
+    $bg-color: #f5f6fa;
+    $text-color: #2f3640;
+    $text-hover-color: #353b48;
+}
+
+$secondary: #718093;

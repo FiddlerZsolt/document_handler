@@ -1,0 +1,41 @@
+@import 'variables';
+@import 'reset';
+
+*,
+*::before,
+*::after {
+    color: $text-color;
+}
+
+body {
+    background-color: $bg-color;
+}
+
+main {
+    margin-inline: auto;
+    width: min(600px, 80%);
+
+    background-color: firebrick;
+}
+
+header {
+    nav {
+        padding: 1rem;
+
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: 1rem;
+
+        background-color: $secondary;
+
+        a {
+            color: $text-color;
+
+            &:hover {
+                color: $text-hover-color;
+                transition: color .2s ease-out;
+            }
+        }
+    }
+}
