@@ -7,14 +7,20 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             {{-- <form action="{{ route('categories.store') }}" method="POST" id="create-form"> --}}
-            <form action="" method="POST" id="upload-form">
+            <form action="{{ route('files.store') }}" method="POST" id="upload-form" enctype="multipart/form-data">
                 <div class="modal-body">
                     @csrf
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12">
                             <div class="form-group mb-3">
                                 <div class="mb-3">
-                                    <input class="form-control" type="file" id="formFile">
+                                    <input class="form-control" type="file" name="file">
+                                    <div id="fileTypeHelp" class="form-text">
+                                        Megengedett formátumok: jpg, png, jpeg, gif, svg
+                                    </div>
+                                    <div id="fileSizeHelp" class="form-text">
+                                        Megengedett méret: 2MB
+                                    </div>
                                 </div>
                             </div>
                         </div>

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
 {
@@ -47,7 +48,7 @@ class CategoryController extends Controller
             'categories.index',
             [
                 'title' => "Kategóriák",
-                'categories' => $categories
+                'categories' => $categories,
             ]
         );
     }
@@ -84,9 +85,6 @@ class CategoryController extends Controller
             'title.min' => 'A név túl rövid',
             'title.unique' => 'Ez a kategória már létezik'
         ]);
-
-        // $validated['parent_id'] = isset($validated['parent_id']) ? $validated['parent_id'] : null;
-        // dd($validated);
 
         Category::create($validated);
 
