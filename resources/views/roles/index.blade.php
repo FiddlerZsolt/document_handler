@@ -2,51 +2,64 @@
 
 @section('content')
 <div class="container">
-    <div class="row justify-content-center mb-3">
-        <div class="col-lg-12 margin-tb">
-            <div class="pull-left">
-                <h2>Role Management</h2>
+    @if ($message = Session::get('success'))
+        <div class="row justify-content-center mb-3">
+            <div class="col-md-8">
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                    {{ $message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
             </div>
+        </div>
+    @endif
+    <div class="row justify-content-center mb-3">
+        <div class="col-md-8 margin-tb">
             <div class="pull-right">
                 @can('role-create')
-                    <a class="btn btn-success" href="{{ route('roles.create') }}"> Create New Role</a>
+                    <a class="btn btn-success" href="{{ route('roles.create') }}">
+                        <i class="bi bi-plus-lg"></i>
+                    </a>
                 @endcan
             </div>
         </div>
     </div>
 
+    <div class="row justify-content-center mb-3">
+        <div class="col-md-8 margin-tb">
 
-    @if ($message = Session::get('success'))
-        <div class="alert alert-success">
-            <p>{{ $message }}</p>
+            <table class="table table-bordered">
+                <tr>
+                    <th colspan="2">Name</th>
+                </tr>
+                @foreach ($roles as $key => $role)
+                    <tr>
+                        <td class="border-end-0" style="height: 1px">
+                            <div class="d-flex align-items-center h-100">
+                                {{ $role->name }}
+                            </div>
+                        </td>
+                        <td class="border-start-0 w-25">
+                            <div class="d-flex justify-content-end">
+                                @can('role-edit')
+                                    <a class="btn btn-sm btn-primary" href="{{ route('roles.edit', $role->id) }}">
+                                        <i class="bi bi-pen-fill"></i>
+                                    </a>
+                                @endcan
+                                @can('role-delete')
+                                    {!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy', $role->id], 'style' => 'display:inline']) !!}
+                                        <button type="submit" class="btn btn-sm btn-danger ms-2">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
+                                    {!! Form::close() !!}
+                                @endcan
+                            </div>
+                        </td>
+                    </tr>
+                @endforeach
+            </table>
+
         </div>
-    @endif
-
-
-    <table class="table table-bordered">
-        <tr>
-            <th>No</th>
-            <th>Name</th>
-            <th width="280px">Action</th>
-        </tr>
-        @foreach ($roles as $key => $role)
-            <tr>
-                <td>{{ ++$i }}</td>
-                <td>{{ $role->name }}</td>
-                <td>
-                    <a class="btn btn-info" href="{{ route('roles.show', $role->id) }}">Show</a>
-                    @can('role-edit')
-                        <a class="btn btn-primary" href="{{ route('roles.edit', $role->id) }}">Edit</a>
-                    @endcan
-                    @can('role-delete')
-                        {!! Form::open(['method' => 'DELETE', 'route' => ['roles.destroy', $role->id], 'style' => 'display:inline']) !!}
-                        {!! Form::submit('Delete', ['class' => 'btn btn-danger']) !!}
-                        {!! Form::close() !!}
-                    @endcan
-                </td>
-            </tr>
-        @endforeach
-    </table>
+    </div>
 </div>
 
 {!! $roles->render() !!}

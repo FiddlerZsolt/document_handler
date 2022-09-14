@@ -45,15 +45,6 @@
                         @endguest
 
                         @auth
-                            @if (Auth::user()->hasRole('admin'))
-                                <li>
-                                    <a class="nav-link" href="{{ route('users.index') }}">Manage Users</a>
-                                </li>
-
-                                <li>
-                                    <a class="nav-link" href="{{ route('roles.index') }}">Manage Role</a>
-                                </li>
-                            @endif
 
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('categories.index') }}">{{ __('Kategóriák') }}</a>
@@ -62,14 +53,21 @@
                             <li class="nav-item dropdown">
 
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }}
+                                    {{ Auth::user()->name }} ({{ Auth::user()->getRoleNames()->first() }})
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdown">
+
+                                    @if (Auth::user()->hasRole('admin'))
+                                        <a class="dropdown-item" href="{{ route('users.index') }}">Felhasználók</a>
+
+                                        <a class="dropdown-item" href="{{ route('roles.index') }}">Rangok</a>
+                                    @endif
+
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        Kijelentkezés
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
