@@ -12,15 +12,44 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
+    function __construct()
+    {
+        $this->middleware(
+            'permission:category-list|category-create|category-edit|category-delete',
+            ['only' => ['index', 'show']]
+        );
+        $this->middleware(
+            'permission:category-create',
+            ['only' => ['create', 'store']]
+        );
+        $this->middleware(
+            'permission:category-edit',
+            ['only' => ['edit', 'update']]
+        );
+        $this->middleware(
+            'permission:category-delete',
+            ['only' => ['destroy']]
+        );
+    }
+
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function index()
     {
-        $categories = Category::tree()->whereDepth('>=',1)->get()->toTree();
+        $categories = Category::tree()
+            ->get()
+            ->toTree();
 
         return view(
-            'categories.index', [
-            'title' => "Kategóriák",
-            'categories' => $categories
-        ]);
+            'categories.index',
+            [
+                'title' => "Kategóriák",
+                'categories' => $categories
+            ]
+        );
     }
 
     /**
@@ -47,20 +76,23 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|min:3',
-            'parent_id' => 'required'
+        $validated = $request->validate([
+            'title' => 'required|min:3|unique:categories,title',
+            'parent_id' => 'nullable'
         ], [
-            'title.required' => 'Title field is required.',
-            'parent_id.required' => 'Parent is required.',
+            'title.required' => 'A név nem hagyható üresen',
+            'title.min' => 'A név túl rövid',
+            'title.unique' => 'Ez a kategória már létezik'
         ]);
 
-        Category::create([
-            'title' => $validatedData["title"],
-            'parent_id' => $validatedData["parent_id"]
-        ]);
+        // $validated['parent_id'] = isset($validated['parent_id']) ? $validated['parent_id'] : null;
+        // dd($validated);
 
-        return redirect('/categories');
+        Category::create($validated);
+
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Category created successfully.');
     }
 
     /**
@@ -72,26 +104,33 @@ class CategoryController extends Controller
     public function show($id)
     {
         $category = Category::find($id);
-        $categories = Category::tree()->get()->toTree();
-        $children = Category::find($id)->descendants()->depthFirst()->get()->toTree();
+        $categories = Category::tree()
+            ->get()
+            ->toTree();
+        $children = Category::find($id)
+            ->descendants()
+            ->depthFirst()
+            ->get()
+            ->toTree();
 
         return view(
-            'categories.show', [
-            'title' => "Kategóra - {$category->title}",
-            'category' => $category,
-            'categories' => $categories,
-            'children' => $children,
-        ]);
+            'categories.show',
+            [
+                'title' => "Kategóra - {$category->title}",
+                'category' => $category,
+                'categories' => $categories,
+                'children' => $children,
+            ]
+        );
     }
 
     /**
      * Show the form for editing the specified resource.
      *
      * @param  \App\Models\Category  $category
-     * @param  integer $id
      * @return \Illuminate\Http\Response
      */
-    public function edit(Category $category, $id)
+    public function edit(Category $category)
     {
         //
     }
@@ -100,40 +139,39 @@ class CategoryController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \App\Http\Requests\Request  $request
-     * @param  integer $id
+     * @param  \App\Models\Category $category
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Category $category)
     {
-        $validatedData = $request->validate([
-            'title' => 'required|min:3',
-            'parent_id' => 'required'
+        request()->validate([
+            'title' => 'required|min:3|unique:categories,title',
+            'parent_id' => 'nullable'
         ], [
-            'title.required' => 'Title field is required.',
-            'parent_id.required' => 'Parent is required.',
+            'title.required' => 'A név nem hagyható üresen',
+            'title.min' => 'A név túl rövid',
+            'title.unique' => 'Ez a kategória már létezik'
         ]);
 
-        $category = Category::find($id);
+        $category->update($request->all());
 
-        $category->title = $validatedData["title"];
-        $category->parent_id = $validatedData["parent_id"];
-
-        $category->save();
-
-        return back()->with('success', 'Category updated successfully.');
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Category updated successfully');
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  integer $id
+     * @param  \App\Models\Category $category
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Category $category)
     {
-        $category = Category::find($id);
         $category->delete();
 
-        return redirect('/categories');
+        return redirect()
+            ->route('categories.index')
+            ->with('success', 'Category deleted successfully');
     }
 }

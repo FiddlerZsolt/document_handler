@@ -15,11 +15,13 @@
 
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    @stack('scripts')
 </head>
 <body>
     <div id="app">
-        <nav class="navbar navbar-expand-md navbar-light bg-white shadow-sm">
-            <div class="container">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark shadow-sm">
+            <div class="container-fluid">
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="{{ __('Toggle navigation') }}">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -43,12 +45,18 @@
                         @endguest
 
                         @auth
-                            <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/categories') }}">{{ __('Kategóriák') }}</a>
-                            </li>
+                            @if (Auth::user()->hasRole('admin'))
+                                <li>
+                                    <a class="nav-link" href="{{ route('users.index') }}">Manage Users</a>
+                                </li>
+
+                                <li>
+                                    <a class="nav-link" href="{{ route('roles.index') }}">Manage Role</a>
+                                </li>
+                            @endif
 
                             <li class="nav-item">
-                                <a class="nav-link" href="{{ url('/categories/create') }}">{{ __('Új kategória') }}</a>
+                                <a class="nav-link" href="{{ route('categories.index') }}">{{ __('Kategóriák') }}</a>
                             </li>
 
                             <li class="nav-item dropdown">
@@ -57,7 +65,7 @@
                                     {{ Auth::user()->name }}
                                 </a>
 
-                                <div class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                                <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdown">
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">

@@ -14,7 +14,11 @@ class Category extends Model
 
     public function isRoot()
     {
-        $root = Category::where('parent_id', null)->first();
-        return $this->parent_id === $root->id;
+        return $this->parent_id === null;
+    }
+
+    public function hasChildren()
+    {
+        return count($this->children) > 0;
     }
 }

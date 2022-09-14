@@ -2,6 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\RoleController;
+use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
 
 /*
@@ -19,22 +22,12 @@ Route::get('/', function () {
     return view('welcome');
 });
 
-Route::middleware('auth')->group(function ()
-{
-
-    Route::controller(CategoryController::class)->group(function ()
-    {
-        Route::get('/categories/{id}', 'show')->where('id', '[0-9]+');
-        Route::get('/categories/create', 'create');
-        Route::get('/categories', 'index');
-
-        Route::post('/categories/store', 'store');
-        Route::post('/categories/{id}', 'update')->where('id', '[0-9]+');
-
-        Route::delete('/categories/{id}', 'destroy');
-    });
-});
-
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [HomeController::class, 'index'])->name('home');
+
+Route::group(['middleware' => ['auth']], function() {
+    Route::resource('roles', RoleController::class);
+    Route::resource('users', UserController::class);
+    Route::resource('categories', CategoryController::class);
+});

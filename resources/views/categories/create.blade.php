@@ -5,7 +5,7 @@
     <div class="container">
         <div class="row justify-content-center">
             <div class="col-md-6">
-                <form action="/categories/store" method="POST">
+                <form action="{{ route('categories.store') }}" method="POST">
 
                     @csrf
 

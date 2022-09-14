@@ -46,7 +46,7 @@
         {{-- Edit --}}
         <div class="row justify-content-center mb-3">
             <div class="col-md-6">
-                <form action="/categories/{{ $category->id }}" method="POST">
+                <form action="/categories/{{ $category->id }}/edit" method="POST">
 
                     @csrf
 
@@ -72,13 +72,13 @@
                                 </a>
                             @endif
                         </label>
-                        <x-category-select name="parent_id" :categories="$categories" :selected="$category->parent_id" :except="$category->id" />
+                        <x-categories.select name="parent_id" :categories="$categories" :selected="$category->parent_id" :except="$category->id" />
                     </div>
 
                     @if ($children)
                         <div class="mb-3">
                             <label for="name" class="form-label">Gyerekek</label>
-                            <x-category-list :categories="$children" />
+                            <x-categories.list :categories="$children" />
                         </div>
                     @endif
 

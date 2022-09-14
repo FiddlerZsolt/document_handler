@@ -12,7 +12,7 @@
 
         @foreach ($category->children as $child)
 
-            <x-category-option :category="$child" :selected="$selected" :except="$except" />
+            <x-categories.option :category="$child" :selected="$selected" :except="$except" />
 
         @endforeach
 
