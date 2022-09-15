@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Auth;
 
-use App\Http\Controllers\HomeController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\CategoryController;
-use App\Http\Controllers\FileUploadController;
+use App\Http\Controllers\FileController;
+use App\Http\Controllers\DownloadFileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,5 +31,7 @@ Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);
     Route::resource('users', UserController::class);
     Route::resource('categories', CategoryController::class);
-    Route::resource('files', FileUploadController::class);
+    Route::resource('files', FileController::class);
+
+    Route::get('/file-download/{id}', [DownloadFileController::class, 'index'])->name('file.download.index');
 });
