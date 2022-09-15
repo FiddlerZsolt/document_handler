@@ -6,13 +6,8 @@ use Illuminate\Http\Request;
 use App\Models\File;
 use Illuminate\Support\Facades\Storage;
 
-class FileUploadController extends Controller
+class FileController extends Controller
 {
-     public function index()
-    {
-        return view('file-upload');
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -40,14 +35,7 @@ class FileUploadController extends Controller
 
         $fileName = explode('.', $name);
         $storedName = $fileName[0] . "_v" . $version . "." . $extension;
-
-        // dd([
-        //     'storedName' => $storedName,
-        //     'name' => $fileName[0],
-        //     'extension' => $file->extension(),
-        //     'version' => $version,
-        //     'lastVersion' => $lastVersion->version,
-        // ]);
+        $savePath = public_path('asd');
 
         $path = $file->storeAs('public/files/' . $validated['category_id'], $storedName);
 
@@ -61,7 +49,21 @@ class FileUploadController extends Controller
         return redirect()->action(
             [CategoryController::class, 'show'], ['category' => $validated['category_id']]
         );
-            // ->route('categories.show', ['id' => $validated['category_id']])
-            // ->with('status', 'File Has been uploaded successfully in laravel');
+    }
+
+    /**
+     * Write code on Method
+     *
+     * @return response()
+     */
+    public function destroy(File $file)
+    {
+        $category = $file->category_id;
+        Storage::delete($file->path);
+        $file->delete();
+
+        return redirect()
+            ->action([CategoryController::class, 'show'], ['category' => $category])
+            ->with('success', 'File deleted successfully');
     }
 }

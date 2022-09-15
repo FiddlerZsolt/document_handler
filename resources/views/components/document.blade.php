@@ -19,12 +19,18 @@
         </div>
         <div class="card-body p-0">
             <div class="btn-group d-flex" role="group">
-                <a class="btn btn-outline-primary w-100 rounded-0" href="{{ $link }}">
-                    <i class="bi bi-file-earmark-arrow-down-fill"></i>
-                </a>
-                <button class="btn btn-outline-danger rounded-0" data-id="{{ $id }}">
-                    <i class="bi bi-trash3-fill"></i>
-                </button>
+
+                {!! Form::open(['method' => 'GET', 'route' => ['file.download.index', $id], 'style' => 'display:inline', 'class' => 'w-100']) !!}
+                    <button class="btn btn-outline-primary w-100 rounded-0">
+                        <i class="bi bi-file-earmark-arrow-down-fill"></i>
+                    </button>
+                {!! Form::close() !!}
+
+                {!! Form::open(['method' => 'DELETE', 'route' => ['files.destroy', $id], 'style' => 'display:inline']) !!}
+                    <button type="submit" class="btn btn-outline-danger rounded-0">
+                        <i class="bi bi-trash3-fill"></i>
+                    </button>
+                {!! Form::close() !!}
             </div>
         </div>
     </div>
