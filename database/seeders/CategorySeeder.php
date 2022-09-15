@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use \App\Models\Category;
 
 class CategorySeeder extends Seeder
 {
@@ -14,8 +15,8 @@ class CategorySeeder extends Seeder
      */
     public function run()
     {
-        \App\Models\Category::factory()->create([
-            'title' => 'main'
-        ]);
+        Category::factory()->create(['title' => 'Main Category 1']);
+        Category::factory()->create(['title' => 'Main Category 2']);
+        Category::factory()->create(['title' => 'Main Category 3']);
     }
 }

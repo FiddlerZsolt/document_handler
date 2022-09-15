@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Category;
+use App\Models\File;
 use Illuminate\Support\Facades\Storage;
 
 class CategoryController extends Controller
@@ -49,6 +50,8 @@ class CategoryController extends Controller
             [
                 'title' => "Kategóriák",
                 'categories' => $categories,
+                'files' => [],
+                'active_category' => null,
             ]
         );
     }
@@ -101,23 +104,19 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $category = Category::find($id);
+        $files = File::where('category_id', $id)->get();
+
         $categories = Category::tree()
-            ->get()
-            ->toTree();
-        $children = Category::find($id)
-            ->descendants()
-            ->depthFirst()
             ->get()
             ->toTree();
 
         return view(
-            'categories.show',
+            'categories.index',
             [
-                'title' => "Kategóra - {$category->title}",
-                'category' => $category,
+                'title' => "Kategóriák",
                 'categories' => $categories,
-                'children' => $children,
+                'files' => $files,
+                'active_category' => $id,
             ]
         );
     }

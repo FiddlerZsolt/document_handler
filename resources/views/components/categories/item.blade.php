@@ -1,10 +1,17 @@
-@props(['category', 'except' => 1])
+@props(['category', 'active_category' => null])
+
+@php
+    $active = $active_category == $category->id;
+@endphp
 
 <div class="accordion-item border border-0">
     <h2 class="accordion-header p-1 fs-5" id="headingOne">
 
         <div class="btn-group d-flex" role="group">
-            <a class="text-start btn btn-outline-dark w-100" href="/categories/{{ $category->id }}">
+            <a  class="text-start btn {{ $active ? "btn-dark active-category" : "btn-outline-dark" }} w-100"
+                href="/categories/{{ $category->id }}"
+                {{ $active ? "data-path=$category->path" : "" }}>
+
                 @if (!$category->isRoot())
                     <i class="bi bi-arrow-return-right me-1"></i>
                 @endif
@@ -55,7 +62,7 @@
             {{-- <div class="accordion-body pe-0 pt-0 pb-0"> --}}
             <div class="accordion-body pe-0 pt-0 pb-0" style="padding-left: .5rem;">
                 @foreach ($category->children as $child)
-                    <x-categories.item :category="$child" :except="$except" />
+                    <x-categories.item :category="$child" :active_category="$active_category" />
                 @endforeach
             </div>
         </div>

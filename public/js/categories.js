@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function() {
     const createModal = document.getElementById('new-category-modal')
     const editModal = document.getElementById('edit-modal')
 
+    collapseSelectedCategoryParents()
+
     createModal.addEventListener('hidden.bs.modal', function(event) {
         this.querySelector(`input[name="title"]`).value = ''
         this.querySelector(`input[name="parent_id"]`).value = ''
@@ -42,4 +44,17 @@ document.addEventListener("DOMContentLoaded", function() {
         })
     })
 });
+
+function collapseSelectedCategoryParents() {
+    const active = document.querySelector('[data-path]')
+    const path = active.dataset.path
+    const parents = path.split('.')
+    parents.pop();
+    parents.forEach(cat => {
+        document
+            .getElementById(`collapse-${cat}`)
+            .classList
+            .add('show')
+    })
+}
 

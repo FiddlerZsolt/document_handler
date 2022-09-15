@@ -20,12 +20,11 @@ use App\Http\Controllers\FileUploadController;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return redirect()
+        ->route('categories.index');
 });
 
 Auth::routes();
-
-Route::get('/home', [HomeController::class, 'index'])->name('home');
 
 Route::group(['middleware' => ['auth']], function() {
     Route::resource('roles', RoleController::class);

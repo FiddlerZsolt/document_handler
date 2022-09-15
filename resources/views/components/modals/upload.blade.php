@@ -1,3 +1,5 @@
+@props(['id'])
+
 <!-- Create Modal -->
 <div class="modal fade" id="upload-modal" tabindex="-1" aria-labelledby="upload modal" aria-hidden="true">
     <div class="modal-dialog">
@@ -7,7 +9,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             {{-- <form action="{{ route('categories.store') }}" method="POST" id="create-form"> --}}
-            <form action="{{ route('files.store') }}" method="POST" id="upload-form" enctype="multipart/form-data">
+            <form action="{{ route('files.store', ['category_id' => $id]) }}" method="POST" id="upload-form" enctype="multipart/form-data">
                 <div class="modal-body">
                     @csrf
                     <div class="row">

@@ -56,7 +56,7 @@
                     <div class="col-12">
                         @can('category-list')
                             @if (count($categories) > 0)
-                                <x-categories.list :categories="$categories" />
+                                <x-categories.list :categories="$categories" :active_category="$active_category" />
                             @else
                                 <ul>
                                     <li>Nincs megjeleníthetõ kategória</li>
@@ -86,14 +86,14 @@
                     </div>
                 </div>
 
-                <x-documents />
+                <x-documents :files="$files" />
 
             </div>
 
         </div>
     </div>
 
-    <x-modals.upload />
+    <x-modals.upload :id="$active_category" />
 
     <x-modals.create />
 
