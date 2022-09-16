@@ -53,13 +53,15 @@
 * A feltöltött fájlok veziója az ikon jobb felő sarkában látható
 * A kék színű gombbal lehet letölteni, a pirossal törölni az adott fájlt
 
-
 Amennyiben admin felhasználó van bejelentkezve, elérhetőek a jobb felső sarokban lévő legördülő menüből a "felhasználók" és "rangok" menüpont.
 
 ##### Felhasználó kezelés
+
 * A listában látható az összes felhasználó, a rangjuk, illetve itt lehet szerkeszteni és törölni őket
 * A szerkesztő felületen minden adatuk átírható, illetve itt állítható be az egyes kategóriákhoz a le és feltöltési joguk
+
 ##### Rang kezelés
+
 * A listában látható az összes rang. Itt lehet szerkeszteni és törölni őket
 * A szerkesztő felületen megváltoztatható a nevük, illetve itt állítható be, hogy az ezzel a reggel rendelező felhasználó mihez férhet hozzá
 
