@@ -17,6 +17,5 @@ class CategorySeeder extends Seeder
     {
         Category::factory()->create(['title' => 'Main Category 1']);
         Category::factory()->create(['title' => 'Main Category 2']);
-        Category::factory()->create(['title' => 'Main Category 3']);
     }
 }

@@ -8,6 +8,38 @@ use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    function __construct()
+    {
+        $this->middleware(
+            'permission:file-list|file-create|file-delete',
+            [
+                'only' => ['index', 'store']
+            ]
+        );
+        $this->middleware(
+            'permission:file-create',
+            [
+                'only' => ['store']
+            ]
+        );
+        $this->middleware(
+            'permission:file-delete',
+            [
+                'only' => ['destroy']
+            ]
+        );
+    }
+
+    public function index()
+    {
+        return view('file-upload');
+    }
+
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -35,7 +67,6 @@ class FileController extends Controller
 
         $fileName = explode('.', $name);
         $storedName = $fileName[0] . "_v" . $version . "." . $extension;
-        $savePath = public_path('asd');
 
         $path = $file->storeAs('public/files/' . $validated['category_id'], $storedName);
 
