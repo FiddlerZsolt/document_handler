@@ -22,7 +22,7 @@
 
 * Alap adatok adatbázsba írása: `sail artisan db:seed`
 
-* Ezutan a [localhost](https://localhost) -on elerheto az alkalmazás
+* Ezutan a [localhost](http://localhost) -on elerheto az alkalmazás
 
 #### Használat
 
