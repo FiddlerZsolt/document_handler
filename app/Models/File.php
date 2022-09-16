@@ -19,5 +19,6 @@ class File extends Model
         'path',
         'version',
         'category_id',
+        'user_id',
     ];
 }

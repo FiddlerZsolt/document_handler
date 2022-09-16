@@ -28,11 +28,11 @@
 
                 <table class="table table-striped table-bordered">
                     <thead>
-                      <tr>
-                        <th scope="col">Név</th>
-                        <th scope="col">Email</th>
-                        <th scope="col" colspan="2">Roles</th>
-                      </tr>
+                        <tr>
+                            <th scope="col">Név</th>
+                            <th scope="col">Email</th>
+                            <th scope="col" colspan="2">Roles</th>
+                        </tr>
                     </thead>
                     <tbody>
                         @foreach ($data as $key => $user)
@@ -61,9 +61,9 @@
                                         </a>
 
                                         {!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id], 'style' => 'display:inline']) !!}
-                                            <button type="submit" class="btn btn-sm btn-danger ms-2">
-                                                <i class="bi bi-trash3-fill"></i>
-                                            </button>
+                                        <button type="submit" class="btn btn-sm btn-danger ms-2">
+                                            <i class="bi bi-trash3-fill"></i>
+                                        </button>
                                         {!! Form::close() !!}
                                     </div>
                                 </td>

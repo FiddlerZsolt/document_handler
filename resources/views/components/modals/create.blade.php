@@ -16,7 +16,8 @@
                                     Kategória neve
                                 </label>
                                 <input type="text" id="name" class="form-control" name="title" value="">
-                                <input type="hidden" id="parent_id" class="form-control" name="parent_id" value="">
+                                <input type="hidden" id="parent_id" class="form-control" name="parent_id"
+                                    value="">
                                 <div id="nameHelp" class="form-text">
                                     Minimum 3 karakter
                                 </div>

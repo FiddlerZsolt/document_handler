@@ -5,8 +5,8 @@
 @endpush
 
 @php
-    $uploadPermission = !is_null($categoryPermission) && $categoryPermission->upload;
-    $downloadPermission = !is_null($categoryPermission) && $categoryPermission->download;
+$uploadPermission = !is_null($categoryPermission) && $categoryPermission->upload;
+$downloadPermission = !is_null($categoryPermission) && $categoryPermission->download;
 @endphp
 
 @section('content')
@@ -45,8 +45,8 @@
                     <div class="row mb-3">
                         <div class="col-12">
                             <!-- Create new category -->
-                            <button class="btn btn-success d-inline-block" type="button" data-id=""
-                                data-bs-toggle="modal" data-bs-target="#new-category-modal">
+                            <button class="btn btn-success d-inline-block" type="button" data-id="" data-bs-toggle="modal"
+                                data-bs-target="#new-category-modal">
                                 <i class="bi bi-plus-lg"></i>
                             </button>
                         </div>
@@ -70,7 +70,6 @@
             <div class="col-12 col-sm-12col-md-6 col-lg-7 col-xl-8 col-xxl-9">
 
                 @if (!is_null($active_category))
-
                     <div class="row justify-content-center mb-3">
                         <div class="col-12">
                             <h3 class="text-center">
@@ -79,12 +78,12 @@
                         </div>
                     </div>
 
-                    @if ($uploadPermission)
+                    @if ($uploadPermission && !$active_category->isRoot())
                         <div class="row mb-3">
                             <div class="col-12">
                                 <!-- Upload new file -->
-                                <button class="btn btn-success d-inline-block" type="button"
-                                    data-bs-toggle="modal" data-bs-target="#upload-modal">
+                                <button class="btn btn-success d-inline-block" type="button" data-bs-toggle="modal"
+                                    data-bs-target="#upload-modal">
                                     <i class="bi bi-plus-lg"></i>
                                 </button>
                             </div>
@@ -94,9 +93,7 @@
                     <x-documents :files="$files" :download="$downloadPermission" />
 
                     <x-modals.upload :id="$active_category" />
-
                 @else
-
                     <div class="row justify-content-center mb-3">
                         <div class="col-12">
                             <h3 class="text-center">
@@ -104,7 +101,6 @@
                             </h3>
                         </div>
                     </div>
-
                 @endif
 
             </div>

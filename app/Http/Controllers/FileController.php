@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\File;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class FileController extends Controller
@@ -79,8 +80,9 @@ class FileController extends Controller
         File::create([
             'name' => $name,
             'path' => $path,
-            'category_id' => $validated['category_id'],
             'version' => $version,
+            'category_id' => $validated['category_id'],
+            'user_id' => Auth::user()->id,
         ]);
 
         return redirect()->action(

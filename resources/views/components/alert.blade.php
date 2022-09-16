@@ -1,17 +1,15 @@
-@props([
-    'message',
-    'type' => "error"
-])
+@props(['message', 'type' => 'error'])
 
-@if ($type === "error")
-    <div class="alert alert-danger alert-dismissible fade show" role="alert">
-@endif
+@php
+if ($type === 'error') {
+    $className = 'danger';
+}
+if ($type === 'success') {
+    $className = 'success';
+}
+@endphp
 
-@if ($type === "success")
-    <div class="alert alert-success alert-dismissible fade show" role="alert">
-@endif
-
+<div class="alert alert-{{ $className }} alert-dismissible fade show" role="alert">
     {{ $message }}
-
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
 </div>

@@ -1,16 +1,15 @@
 @props(['category', 'active_category'])
 
 @php
-    $active = !is_null($active_category) && $active_category->id === $category->id;
+$active = !is_null($active_category) && $active_category->id === $category->id;
 @endphp
 
 <div class="accordion-item border border-0">
     <h2 class="accordion-header p-1 fs-5" id="headingOne">
 
         <div class="btn-group d-flex" role="group">
-            <a  class="text-start btn {{ $active ? "btn-dark active-category" : "btn-outline-dark" }} w-100"
-                href="/categories/{{ $category->id }}"
-                {{ $active ? "data-path=$category->path" : "" }}>
+            <a class="text-start btn {{ $active ? 'btn-dark active-category' : 'btn-outline-dark' }} w-100"
+                href="/categories/{{ $category->id }}" {{ $active ? "data-path=$category->path" : '' }}>
 
                 @if (!$category->isRoot())
                     <i class="bi bi-arrow-return-right me-1"></i>
@@ -29,9 +28,9 @@
 
             @can('category-edit')
                 <!-- Edit category -->
-                <button class="btn btn-outline-primary d-inline-block" type="button"
-                    data-id="{{ $category->id }}" data-title="{{ $category->title }}"
-                    data-title="collapse-{{ $category->title }}" data-bs-toggle="modal" data-bs-target="#edit-modal">
+                <button class="btn btn-outline-primary d-inline-block" type="button" data-id="{{ $category->id }}"
+                    data-title="{{ $category->title }}" data-title="collapse-{{ $category->title }}" data-bs-toggle="modal"
+                    data-bs-target="#edit-modal">
                     <i class="bi bi-pen-fill"></i>
                 </button>
             @endcan
@@ -45,12 +44,8 @@
             @endcan
 
             <!-- Collapse children -->
-            <button
-                class="btn btn-outline-secondary d-inline-block text-start"
-                type="button"
-                data-bs-toggle="collapse"
-                data-bs-target="#collapse-{{ $category->id }}"
-                {{ $category->hasChildren() ? "" : "disabled" }}>
+            <button class="btn btn-outline-secondary d-inline-block text-start" type="button" data-bs-toggle="collapse"
+                data-bs-target="#collapse-{{ $category->id }}" {{ $category->hasChildren() ? '' : 'disabled' }}>
                 <i class="bi bi-caret-down-fill"></i>
             </button>
         </div>

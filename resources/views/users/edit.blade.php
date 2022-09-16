@@ -64,31 +64,29 @@
                 </thead>
                 <tbody>
                     @foreach ($categories as $category)
-                    <tr>
-                        <th scope="row">{{ $category->title }}</th>
-                        <td class="text-center">
-                            {{ Form::checkbox(
-                                'uploadPermissions[]',
-                                $category->id,
-                                (isset($preparedCategoryPermissions[$category->id]) &&
-                                $preparedCategoryPermissions[$category->id]['upload'] === 1)
-                                    ? true
-                                    : false,
-                                ['class' => 'name']
-                            ) }}
-                        </td>
-                        <td class="text-center">
-                            {{ Form::checkbox(
-                                'downloadPermissions[]',
-                                $category->id,
-                                (isset($preparedCategoryPermissions[$category->id]) &&
-                                $preparedCategoryPermissions[$category->id]['download'] === 1)
-                                    ? true
-                                    : false,
-                                ['class' => 'name']
-                            ) }}
-                        </td>
-                    </tr>
+                        <tr>
+                            <th scope="row">{{ $category->title }}</th>
+                            <td class="text-center">
+                                {{ Form::checkbox(
+                                    'uploadPermissions[]',
+                                    $category->id,
+                                    isset($preparedCategoryPermissions[$category->id]) && $preparedCategoryPermissions[$category->id]['upload'] === 1
+                                        ? true
+                                        : false,
+                                    ['class' => 'name'],
+                                ) }}
+                            </td>
+                            <td class="text-center">
+                                {{ Form::checkbox(
+                                    'downloadPermissions[]',
+                                    $category->id,
+                                    isset($preparedCategoryPermissions[$category->id]) && $preparedCategoryPermissions[$category->id]['download'] === 1
+                                        ? true
+                                        : false,
+                                    ['class' => 'name'],
+                                ) }}
+                            </td>
+                        </tr>
                     @endforeach
                 </tbody>
             </table>

@@ -1,7 +1,4 @@
-@props([
-    'categories',
-    'active_category'
-])
+@props(['categories', 'active_category'])
 
 <div class="accordion" id="categories">
     @foreach ($categories as $category)

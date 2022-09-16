@@ -113,7 +113,10 @@ class CategoryController extends Controller
      */
     public function show($id)
     {
-        $files = File::where('category_id', $id)->orderBy('name', 'asc')->get();
+        $files = File::join('users', 'users.id', '=', 'files.user_id')
+            ->where('files.category_id', $id)
+            ->orderBy('files.name', 'asc')
+            ->get(['files.*', 'users.name as user_name']);
 
         $categories = Category::tree()
             ->get()

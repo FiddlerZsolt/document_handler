@@ -6,8 +6,8 @@
                 <h5 class="modal-title" id="exampleModalLabel">Biztosan törlöd a kategóriát?</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form id="delete-form" class="d-flex justify-content-end" action="{{ url('categories') }}" data-base="{{ url('categories') }}"
-                method="POST">
+            <form id="delete-form" class="d-flex justify-content-end" action="{{ url('categories') }}"
+                data-base="{{ url('categories') }}" method="POST">
                 @csrf
                 @method('DELETE')
                 <div class="modal-footer">
