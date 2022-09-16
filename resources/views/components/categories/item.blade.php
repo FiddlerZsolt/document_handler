@@ -1,7 +1,7 @@
-@props(['category', 'active_category' => null])
+@props(['category', 'active_category'])
 
 @php
-    $active = $active_category == $category->id;
+    $active = !is_null($active_category) && $active_category->id === $category->id;
 @endphp
 
 <div class="accordion-item border border-0">

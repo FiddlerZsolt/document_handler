@@ -29,9 +29,8 @@ document.addEventListener("DOMContentLoaded", function() {
             const title = this.dataset.title
             const form = document.getElementById('edit-form')
             const input = document.querySelector('#edit-form input[name="title"]')
-            form.action = `categories/${id}`
+            form.action = `${form.dataset.base}/${id}`
             input.value = title
-            console.log(form);
         })
     })
 
@@ -39,22 +38,24 @@ document.addEventListener("DOMContentLoaded", function() {
         button.addEventListener('click', function() {
             const id = this.dataset.id
             const form = document.getElementById('delete-form')
-            form.action = `categories/${id}`
-            console.log(form);
+            form.action = `${form.dataset.base}/${id}`
         })
     })
 });
 
 function collapseSelectedCategoryParents() {
     const active = document.querySelector('[data-path]')
-    const path = active.dataset.path
-    const parents = path.split('.')
-    parents.pop();
-    parents.forEach(cat => {
-        document
-            .getElementById(`collapse-${cat}`)
-            .classList
-            .add('show')
-    })
+
+    if (active !== null) {
+        const path = active.dataset.path
+        const parents = path.split('.')
+        parents.pop();
+        parents.forEach(cat => {
+            document
+                .getElementById(`collapse-${cat}`)
+                .classList
+                .add('show')
+        })
+    }
 }
 

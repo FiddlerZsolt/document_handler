@@ -42,6 +42,7 @@ class FileController extends Controller
 
     public function store(Request $request)
     {
+
         $validated = $request->validate([
             'file' => 'required|image|mimes:jpg,png,jpeg,gif,svg|max:2048',
             'category_id' => 'required',
@@ -51,6 +52,11 @@ class FileController extends Controller
             'file.mimes' => 'Nem megfelelō fájl formátum.',
             'category_id.required' => 'Kategória azonosító megadása kötelezō',
         ]);
+
+        if (!CategoryController::hasPermission($validated['category_id'])->upload)
+            return redirect()
+                ->action([CategoryController::class, 'show'], ['category' => $validated['category_id']])
+                ->withErrors('Fájl feltöltés nem megengedett!');
 
         $file = $request->file('file');
         $name = $file->getClientOriginalName();

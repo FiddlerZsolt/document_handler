@@ -1,36 +1,35 @@
 @extends('layouts.app')
 
-
 @section('content')
     <div class="row justify-content-center">
-        <div class="col-xs-12 col-sm-12 col-md-3 mb-3">
-            <div class="pull-left">
-                <h2>Edit New User</h2>
-            </div>
-            <div class="pull-right">
-                <a class="btn btn-primary" href="{{ route('users.index') }}"> Back</a>
-            </div>
+        <div class="col-12 col-sm-8">
+            <h2>Felhasználó szerkesztése</h2>
+        </div>
+    </div>
+    <div class="row justify-content-center mb-3">
+        <div class="col-12 col-sm-8">
+            <a class="btn btn-primary" href="{{ route('users.index') }}">
+                <i class="bi bi-caret-left-fill"></i>
+                Vissza
+            </a>
         </div>
     </div>
 
-
     @if (count($errors) > 0)
-        <div class="alert alert-danger">
-            <strong>Whoops!</strong> There were some problems with your input.<br><br>
-            <ul>
+        <div class="row justify-content-center mb-3">
+            <div class="col-12 col-sm-7">
                 @foreach ($errors->all() as $error)
-                    <li>{{ $error }}</li>
+                    <x-alert :message="$error" />
                 @endforeach
-            </ul>
+            </div>
         </div>
     @endif
 
-
     {!! Form::model($user, ['method' => 'PATCH', 'route' => ['users.update', $user->id]]) !!}
     <div class="row justify-content-center">
-        <div class="col-xs-12 col-sm-12 col-md-3">
+        <div class="col-xs-12 col-4">
             <div class="form-group mb-3">
-                <strong>Name:</strong>
+                <strong>Név:</strong>
                 {!! Form::text('name', null, ['placeholder' => 'Name', 'class' => 'form-control']) !!}
             </div>
             <div class="form-group mb-3">
@@ -38,19 +37,48 @@
                 {!! Form::text('email', null, ['placeholder' => 'Email', 'class' => 'form-control']) !!}
             </div>
             <div class="form-group mb-3">
-                <strong>Password:</strong>
+                <strong>Jelszó:</strong>
                 {!! Form::password('password', ['placeholder' => 'Password', 'class' => 'form-control']) !!}
             </div>
             <div class="form-group mb-3">
-                <strong>Confirm Password:</strong>
+                <strong>Jelszó mégegyszer:</strong>
                 {!! Form::password('confirm-password', ['placeholder' => 'Confirm Password', 'class' => 'form-control']) !!}
             </div>
             <div class="form-group mb-3">
-                <strong>Role:</strong>
-                {!! Form::select('roles[]', $roles, $userRole, ['class' => 'form-control', 'multiple']) !!}
+                <strong>Rang:</strong>
+                {!! Form::select('roles[]', $roles, $userRole, ['class' => 'form-control']) !!}
             </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
+            <button type="submit" class="btn btn-primary">
+                Mentés
+                &nbsp;
+                <i class="bi bi-check-lg"></i>
+            </button>
+        </div>
+        <div class="col-xs-12 col-4">
+            <table class="table w-100">
+                <thead>
+                    <tr>
+                        <th scope="col">Kategória</th>
+                        <th scope="col" class="text-center">Letöltés</th>
+                        <th scope="col" class="text-center">Feltöltés</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach ($categories as $category)
+                    <tr>
+                        <th scope="row">{{ $category->title }}</th>
+                        <td class="text-center">
+                            {{ Form::checkbox('downloadPermissions[]', $category->id, $preparedCategoryPermissions[$category->id]['download'] === 1 ? true : false, ['class' => 'name']) }}
+                        </td>
+                        <td class="text-center">
+                            {{ Form::checkbox('downloadPermissions[]', $category->id, $preparedCategoryPermissions[$category->id]['download'] === 1 ? true : false, ['class' => 'name']) }}
+                        </td>
+                    </tr>
+                    @endforeach
+                </tbody>
+            </table>
         </div>
     </div>
     {!! Form::close() !!}
+
 @endsection

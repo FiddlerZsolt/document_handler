@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Category;
 use App\Models\File;
-use Illuminate\Support\Facades\Storage;
+use App\Models\CategoryPermission;
+
+use Illuminate\Support\Facades\Auth;
 
 class CategoryController extends Controller
 {
@@ -52,6 +54,7 @@ class CategoryController extends Controller
                 'categories' => $categories,
                 'files' => [],
                 'active_category' => null,
+                'categoryPermission' => null,
             ]
         );
     }
@@ -89,11 +92,17 @@ class CategoryController extends Controller
             'title.unique' => 'Ez a kategória már létezik'
         ]);
 
-        Category::create($validated);
+        $category = Category::create($validated);
+        CategoryPermission::create([
+            'user_id' => Auth::user()->id,
+            'category_id' => $category->id,
+            'upload' => 1,
+            'download' => 1,
+        ]);
 
         return redirect()
-            ->route('categories.index')
-            ->with('success', 'Category created successfully.');
+            ->action([CategoryController::class, 'show'], ['category' => $category->id])
+            ->with('success', 'Category created successfully');
     }
 
     /**
@@ -110,13 +119,18 @@ class CategoryController extends Controller
             ->get()
             ->toTree();
 
+        $activeCategory = Category::find($id);
+
+        $categoryPermission = CategoryController::hasPermission($id);
+
         return view(
             'categories.index',
             [
                 'title' => "Kategóriák",
                 'categories' => $categories,
                 'files' => $files,
-                'active_category' => $id,
+                'active_category' => $activeCategory,
+                'categoryPermission' => $categoryPermission,
             ]
         );
     }
@@ -141,19 +155,18 @@ class CategoryController extends Controller
      */
     public function update(Request $request, Category $category)
     {
-        request()->validate([
-            'title' => 'required|min:3|unique:categories,title',
-            'parent_id' => 'nullable'
+        $validated = $request->validate([
+            'title' => 'required|min:3|unique:categories,title'
         ], [
             'title.required' => 'A név nem hagyható üresen',
             'title.min' => 'A név túl rövid',
             'title.unique' => 'Ez a kategória már létezik'
         ]);
 
-        $category->update($request->all());
+        $category->update($validated);
 
         return redirect()
-            ->route('categories.index')
+            ->action([CategoryController::class, 'show'], ['category' => $category->id])
             ->with('success', 'Category updated successfully');
     }
 
@@ -165,10 +178,17 @@ class CategoryController extends Controller
      */
     public function destroy(Category $category)
     {
+        CategoryPermission::where('category_id', $category->id)->delete();
         $category->delete();
 
         return redirect()
             ->route('categories.index')
             ->with('success', 'Category deleted successfully');
+    }
+
+    public static function hasPermission(int $id) {
+        return CategoryPermission::where('user_id', Auth::user()->id)
+            ->where('category_id', $id)
+            ->first();
     }
 }

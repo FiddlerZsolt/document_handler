@@ -2,12 +2,29 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\CategoryPermission;
 use Illuminate\Http\Request;
 use App\Models\File;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Storage;
 
 class DownloadFileController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     *
+     * @return \Illuminate\Http\Response
+     */
+    function __construct()
+    {
+        $this->middleware(
+            'permission:file-download',
+            [
+                'only' => ['index']
+            ]
+        );
+    }
+
     /**
      * Write code on Method
      *
@@ -17,26 +34,10 @@ class DownloadFileController extends Controller
     {
         $file = File::find($id);
 
-        $mimeTypes = [
-            'pdf' => 'application/pdf',
-            'txt' => 'text/plain',
-            'html' => 'text/html',
-            'exe' => 'application/octet-stream',
-            'zip' => 'application/zip',
-            'doc' => 'application/msword',
-            'xls' => 'application/vnd.ms-excel',
-            'ppt' => 'application/vnd.ms-powerpoint',
-            'gif' => 'image/gif',
-            'png' => 'image/png',
-            'jpeg' => 'image/jpg',
-            'jpg' => 'image/jpg',
-            'php' => 'text/plain'
-        ];
-
-        $fileName = $file->name;
-        $extension = explode(".", $file->path)[1];
-        $filePath = public_path($file->path);
-        $headers = ["Content-Type: {$mimeTypes[$extension]}"];
+        if (!CategoryController::hasPermission($file->category_id)->download)
+            return redirect()
+                ->action([CategoryController::class, 'show'], ['category' => $file->category_id])
+                ->withErrors('A fájl letöltése nem megengedett!');
 
         return Storage::download($file->path);
     }

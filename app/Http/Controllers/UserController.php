@@ -4,11 +4,14 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Models\Category;
+use App\Models\CategoryPermission;
 use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Auth;
 
 class UserController extends Controller
 {
@@ -55,10 +58,11 @@ class UserController extends Controller
         $input['password'] = Hash::make($input['password']);
 
         $user = User::create($input);
+        CategoryPermissionController::addUserPermissions($user);
         $user->assignRole($request->input('roles'));
 
         return redirect()->route('users.index')
-            ->with('success', 'User created successfully');
+            ->with('success', 'Felhasználó sikeresen létrehozva');
     }
 
     /**
@@ -84,8 +88,24 @@ class UserController extends Controller
         $user = User::find($id);
         $roles = Role::pluck('name', 'name')->all();
         $userRole = $user->roles->pluck('name', 'name')->all();
+        $categories = Category::all();
+        $userCategoryPermissions = CategoryPermission::where('user_id', $id)->get();
 
-        return view('users.edit', compact('user', 'roles', 'userRole'));
+        $preparedCategoryPermissions = [];
+        foreach ($userCategoryPermissions as $key => $userCategoryPermission) {
+            $preparedCategoryPermissions[$userCategoryPermission->category_id] = [
+                'upload' => $userCategoryPermission->upload,
+                'download' => $userCategoryPermission->download,
+            ];
+        }
+
+        return view('users.edit', compact(
+            'user',
+            'roles',
+            'userRole',
+            'categories',
+            'preparedCategoryPermissions'
+        ));
     }
 
     /**
@@ -101,10 +121,21 @@ class UserController extends Controller
             'name' => 'required',
             'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'same:confirm-password',
-            'roles' => 'required'
+            'roles' => 'required',
+            'uploadPermissions' =>'required',
+            'downloadPermissions' =>'required',
+        ], [
+            'name.required' => 'Név küldése kötelezō',
+            'email.required' => 'Email cím küldése kötelezō',
+            'email.email' => 'Nem megfelelō email formátum',
+            'email.unique' => 'Ezzel az email címmel már létezik felhasználó',
+            'roles.required' => 'Rang küldése kötelezō',
+            'uploadPermissions.required' => 'Feltöltési jogok küldése kötelezō',
+            'downloadPermissions.required' => 'Letöltési jogok küldése kötelezō',
         ]);
 
         $input = $request->all();
+
         if (!empty($input['password'])) {
             $input['password'] = Hash::make($input['password']);
         } else {
@@ -113,12 +144,14 @@ class UserController extends Controller
 
         $user = User::find($id);
         $user->update($input);
+
+        CategoryPermissionController::syncUserPermissions($user, $input['uploadPermissions'], $input['downloadPermissions']);
         DB::table('model_has_roles')->where('model_id', $id)->delete();
 
         $user->assignRole($request->input('roles'));
 
         return redirect()->route('users.index')
-            ->with('success', 'User updated successfully');
+            ->with('success', 'Sikeres frissítés');
     }
 
     /**
@@ -131,6 +164,6 @@ class UserController extends Controller
     {
         User::find($id)->delete();
         return redirect()->route('users.index')
-            ->with('success', 'User deleted successfully');
+            ->with('success', 'Felhasználó sikeresen törölve');
     }
 }

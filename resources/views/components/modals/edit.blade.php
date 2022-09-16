@@ -6,7 +6,7 @@
                 <h5 class="modal-title" id="edit-modal">Kategória szerkesztése</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('categories.update', 0) }}" method="POST" id="edit-form">
+            <form method="POST" id="edit-form" action="{{ url('categories') }}" data-base="{{ url('categories') }}">
                 <div class="modal-body">
                     @csrf
                     @method('PUT')

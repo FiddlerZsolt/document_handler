@@ -28,7 +28,8 @@ class PermissionTableSeeder extends Seeder
 
             'file-list',
             'file-create',
-            'file-delete'
+            'file-delete',
+            'file-download',
         ];
 
         foreach ($permissions as $permission) {

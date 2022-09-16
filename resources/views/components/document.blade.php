@@ -2,7 +2,7 @@
     'id' => null,
     'name' => "",
     'version' => 0,
-    'link' => ""
+    'download'
 ])
 
 <div class="col-sm-6 col-md-4 col-lg-3 col-xl-2 documents">
@@ -21,7 +21,7 @@
             <div class="btn-group d-flex" role="group">
 
                 {!! Form::open(['method' => 'GET', 'route' => ['file.download.index', $id], 'style' => 'display:inline', 'class' => 'w-100']) !!}
-                    <button class="btn btn-outline-primary w-100 rounded-0">
+                    <button class="btn btn-outline-primary w-100 rounded-0 {{ $download ? '' : "disabled" }}">
                         <i class="bi bi-file-earmark-arrow-down-fill"></i>
                     </button>
                 {!! Form::close() !!}

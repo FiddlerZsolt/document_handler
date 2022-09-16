@@ -4,6 +4,11 @@
     <script src="/js/categories.js"></script>
 @endpush
 
+@php
+    $uploadPermission = !is_null($categoryPermission) && $categoryPermission->upload;
+    $downloadPermission = !is_null($categoryPermission) && $categoryPermission->download;
+@endphp
+
 @section('content')
 
     <div class="container-fluid">
@@ -21,9 +26,7 @@
                 @if ($message = session('success'))
                     <div class="row justify-content-center mb-3">
                         <div class="col-12">
-                            <div class="alert alert-success" role="alert">
-                                {{ $message }}
-                            </div>
+                            <x-alert :message="$message" type="success" />
                         </div>
                     </div>
                 @endif
@@ -32,9 +35,7 @@
                     <div class="row justify-content-center mb-3">
                         <div class="col-12">
                             @foreach ($errors->all() as $error)
-                                <div class="alert alert-danger" role="alert">
-                                    {{ $error }}
-                                </div>
+                                <x-alert :message="$message" />
                             @endforeach
                         </div>
                     </div>
@@ -58,9 +59,7 @@
                             @if (count($categories) > 0)
                                 <x-categories.list :categories="$categories" :active_category="$active_category" />
                             @else
-                                <ul>
-                                    <li>Nincs megjeleníthetõ kategória</li>
-                                </ul>
+                                <x-alert message="Nincs megjeleníthetõ kategória" type="success" />
                             @endif
                         @endcan
                     </div>
@@ -70,30 +69,48 @@
 
             <div class="col-12 col-sm-12col-md-6 col-lg-7 col-xl-8 col-xxl-9">
 
-                <div class="row justify-content-center mb-3">
-                    <div class="col-12">
-                        <h3 class="text-center">Fájlok</h3>
-                    </div>
-                </div>
+                @if (!is_null($active_category))
 
-                <div class="row mb-3">
-                    <div class="col-12">
-                        <!-- Create new category -->
-                        <button class="btn btn-success d-inline-block" type="button"
-                            data-bs-toggle="modal" data-bs-target="#upload-modal">
-                            <i class="bi bi-plus-lg"></i>
-                        </button>
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-12">
+                            <h3 class="text-center">
+                                {{ $active_category->title }}
+                            </h3>
+                        </div>
                     </div>
-                </div>
 
-                <x-documents :files="$files" />
+                    @if ($uploadPermission)
+                        <div class="row mb-3">
+                            <div class="col-12">
+                                <!-- Upload new file -->
+                                <button class="btn btn-success d-inline-block" type="button"
+                                    data-bs-toggle="modal" data-bs-target="#upload-modal">
+                                    <i class="bi bi-plus-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    @endif
+
+                    <x-documents :files="$files" :download="$downloadPermission" />
+
+                    <x-modals.upload :id="$active_category" />
+
+                @else
+
+                    <div class="row justify-content-center mb-3">
+                        <div class="col-12">
+                            <h3 class="text-center">
+                                Nincs kiválasztva kategóra, vagy nem létezik
+                            </h3>
+                        </div>
+                    </div>
+
+                @endif
 
             </div>
 
         </div>
     </div>
-
-    <x-modals.upload :id="$active_category" />
 
     <x-modals.create />
 

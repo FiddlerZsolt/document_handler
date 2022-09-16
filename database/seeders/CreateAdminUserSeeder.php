@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Http\Controllers\CategoryPermissionController;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use App\Models\User;
@@ -26,6 +27,7 @@ class CreateAdminUserSeeder extends Seeder
         $role = Role::create(['name' => 'Admin']);
 
         $permissions = Permission::pluck('id', 'id')->all();
+        CategoryPermissionController::addUserPermissions($user);
 
         $role->syncPermissions($permissions);
 

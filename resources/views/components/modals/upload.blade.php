@@ -1,6 +1,6 @@
 @props(['id'])
 
-<!-- Create Modal -->
+<!-- Upload modal -->
 <div class="modal fade" id="upload-modal" tabindex="-1" aria-labelledby="upload modal" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -8,7 +8,6 @@
                 <h5 class="modal-title" id="upload-modal">Új dokumentum feltöltése</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            {{-- <form action="{{ route('categories.store') }}" method="POST" id="create-form"> --}}
             <form action="{{ route('files.store', ['category_id' => $id]) }}" method="POST" id="upload-form" enctype="multipart/form-data">
                 <div class="modal-body">
                     @csrf
