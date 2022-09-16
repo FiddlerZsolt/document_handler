@@ -1,19 +1,6 @@
 @extends('layouts.app')
 
 @section('content')
-    <div class="row justify-content-center">
-        <div class="col-12 col-sm-8">
-            <h2>Felhasználó szerkesztése</h2>
-        </div>
-    </div>
-    <div class="row justify-content-center mb-3">
-        <div class="col-12 col-sm-8">
-            <a class="btn btn-primary" href="{{ route('users.index') }}">
-                <i class="bi bi-caret-left-fill"></i>
-                Vissza
-            </a>
-        </div>
-    </div>
 
     @if (count($errors) > 0)
         <div class="row justify-content-center mb-3">
@@ -24,6 +11,18 @@
             </div>
         </div>
     @endif
+
+    <div class="row justify-content-center mb-3">
+        <div class="col-12 col-sm-7">
+            <h2>Felhasználó szerkesztése</h2>
+        </div>
+        <div class="col-12 col-sm-1 d-flex justify-content-end">
+            <a class="btn btn-primary" href="{{ route('users.index') }}">
+                <i class="bi bi-caret-left-fill"></i>
+                Vissza
+            </a>
+        </div>
+    </div>
 
     {!! Form::model($user, ['method' => 'PATCH', 'route' => ['users.update', $user->id]]) !!}
     <div class="row justify-content-center">
@@ -59,8 +58,8 @@
                 <thead>
                     <tr>
                         <th scope="col">Kategória</th>
-                        <th scope="col" class="text-center">Letöltés</th>
                         <th scope="col" class="text-center">Feltöltés</th>
+                        <th scope="col" class="text-center">Letöltés</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -68,7 +67,7 @@
                     <tr>
                         <th scope="row">{{ $category->title }}</th>
                         <td class="text-center">
-                            {{ Form::checkbox('downloadPermissions[]', $category->id, $preparedCategoryPermissions[$category->id]['download'] === 1 ? true : false, ['class' => 'name']) }}
+                            {{ Form::checkbox('uploadPermissions[]', $category->id, $preparedCategoryPermissions[$category->id]['upload'] === 1 ? true : false, ['class' => 'name']) }}
                         </td>
                         <td class="text-center">
                             {{ Form::checkbox('downloadPermissions[]', $category->id, $preparedCategoryPermissions[$category->id]['download'] === 1 ? true : false, ['class' => 'name']) }}

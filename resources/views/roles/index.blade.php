@@ -4,16 +4,13 @@
 <div class="container">
     @if ($message = Session::get('success'))
         <div class="row justify-content-center mb-3">
-            <div class="col-md-8">
-                <div class="alert alert-success alert-dismissible fade show" role="alert">
-                    {{ $message }}
-                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-                </div>
+            <div class="col-md-5">
+                <x-alert :message="$message" type="success" />
             </div>
         </div>
     @endif
     <div class="row justify-content-center mb-3">
-        <div class="col-md-8 margin-tb">
+        <div class="col-md-5 margin-tb">
             <div class="pull-right">
                 @can('role-create')
                     <a class="btn btn-success" href="{{ route('roles.create') }}">
@@ -25,11 +22,11 @@
     </div>
 
     <div class="row justify-content-center mb-3">
-        <div class="col-md-8 margin-tb">
+        <div class="col-md-5 margin-tb">
 
             <table class="table table-bordered">
                 <tr>
-                    <th colspan="2">Name</th>
+                    <th colspan="2">Név</th>
                 </tr>
                 @foreach ($roles as $key => $role)
                     <tr>

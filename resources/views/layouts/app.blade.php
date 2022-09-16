@@ -36,12 +36,6 @@
                                     <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
                                 </li>
                             @endif
-
-                            @if (Route::has('register'))
-                                <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
-                                </li>
-                            @endif
                         @endguest
 
                         @auth
@@ -58,7 +52,7 @@
 
                                 <div class="dropdown-menu dropdown-menu-dark dropdown-menu-end" aria-labelledby="navbarDropdown">
 
-                                    @if (Auth::user()->hasRole('admin'))
+                                    @if (Auth::user()->hasRole('Admin'))
                                         <a class="dropdown-item" href="{{ route('users.index') }}">Felhasználók</a>
 
                                         <a class="dropdown-item" href="{{ route('roles.index') }}">Rangok</a>
