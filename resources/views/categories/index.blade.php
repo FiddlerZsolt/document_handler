@@ -35,7 +35,7 @@
                     <div class="row justify-content-center mb-3">
                         <div class="col-12">
                             @foreach ($errors->all() as $error)
-                                <x-alert :message="$message" />
+                                <x-alert :message="$error" />
                             @endforeach
                         </div>
                     </div>
